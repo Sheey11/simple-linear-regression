@@ -8,36 +8,34 @@ using System.Windows;
 namespace SimpleLinearRegression {
     public class Model {
         public double LearingRate { get; set; }
-        private double a, b;
+        public double a { get; private set; }
+        public double b { get; private set; }
         public int CurrentEpoch { get; private set; }
         public int CurrentStep { get; private set; }
-        public double Loss { get; private set; }
+        public double Loss { get { return Cost(); } }
 
         private Point[] TrainDataset;
 
         public EventHandler OnTrain;
-        public EventHandler OnTrainFinished;
+        //public EventHandler OnTrainFinished;
 
         public Model(double learningRate) {
             LearingRate = learningRate;
         }
 
-        public async void Train(Point[] dataset, int epoch) {
+        public void Train(Point[] dataset, int epoch) {
             TrainDataset = dataset;
-            a = -1;
-            b = 5;
-            await Task.Run(() => {
-                for (int e = 0; e <= epoch; e++) {
-                    for (int s = 0; s < dataset.Length; s++) {
-                        AdjastParm();
-                        CurrentStep = s + 1;
-                        Loss = Cost();
-                        OnTrain(null, null);
-                    }
-                    CurrentEpoch = e + 1;
+            a = 5;
+            b = 1;
+            for (int e = 0; e < epoch; e++) {
+                CurrentEpoch = e + 1;
+                for (int s = 0; s < dataset.Length; s++) {
+                    AdjastParm();
+                    CurrentStep = s + 1;
+                    OnTrain(null, null);
                 }
-            });
-            OnTrainFinished(null, null);
+            }
+            //OnTrainFinished(null, null);
         }
         void AdjastParm() {
             // gradient descent

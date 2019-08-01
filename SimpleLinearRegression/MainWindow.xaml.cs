@@ -24,7 +24,7 @@ namespace SimpleLinearRegression
     /// </summary>
     public partial class MainWindow : Window {
         Thread workThread, uiThread;
-        Model m = new Model(0.00001);
+        Model m = new Model(0.00059);
 
         public MainWindow() {
             InitializeComponent();
@@ -40,19 +40,23 @@ namespace SimpleLinearRegression
             LossChart.Series = series;
 
             // https://www.kaggle.com/andonians/random-linear-regression
-            var data_x = File.ReadAllLines(@"C:\Users\sheey\Document\ml\train_x.txt");
-            var data_y = File.ReadAllLines(@"C:\Users\sheey\Document\ml\train_y.txt");
+            var data_x = File.ReadAllLines(@"C:\Users\sheey\Documents\ml\train_x.txt");
+            var data_y = File.ReadAllLines(@"C:\Users\sheey\Documents\ml\train_y.txt");
             var trainDataset = new Point[data_x.Length];
             for(int i = 0; i < data_x.Length; i++) {
                 trainDataset[i] = new Point(double.Parse(data_x[i]), double.Parse(data_y[i]));
             }
             uiThread = new Thread(() => {
+                int x = 0;
                 m.OnTrain += (s, args) => {
                     Epoch.Dispatcher.Invoke(() => {
-                        // update chart, epoch, step
+                        // update chart, epoch, step, a, b
                         observableValues.Add(new LiveCharts.Defaults.ObservableValue(m.Loss));
+                        x++;
                         Epoch.Text = m.CurrentEpoch.ToString();
                         Step.Text = m.CurrentStep.ToString();
+                        A.Text = Math.Round(m.a, 2).ToString();
+                        B.Text = Math.Round(m.b, 2).ToString();
                     });
                 };
             });
