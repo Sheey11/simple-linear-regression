@@ -47,12 +47,10 @@ namespace SimpleLinearRegression
                 trainDataset[i] = new Point(double.Parse(data_x[i]), double.Parse(data_y[i]));
             }
             uiThread = new Thread(() => {
-                int x = 0;
                 m.OnTrain += (s, args) => {
                     Epoch.Dispatcher.Invoke(() => {
                         // update chart, epoch, step, a, b
                         observableValues.Add(new LiveCharts.Defaults.ObservableValue(m.Loss));
-                        x++;
                         Epoch.Text = m.CurrentEpoch.ToString();
                         Step.Text = m.CurrentStep.ToString();
                         A.Text = Math.Round(m.a, 2).ToString();
