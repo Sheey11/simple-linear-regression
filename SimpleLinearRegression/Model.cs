@@ -39,12 +39,12 @@ namespace SimpleLinearRegression {
         }
         void AdjastParm() {
             // gradient descent
-            var temp_a = AverageSumOf((p) => { return (Hypophysis(p.X) - p.Y) * p.X; }, TrainDataset);
-            var temp_b = AverageSumOf((p) => { return Hypophysis(p.X) - p.Y; }, TrainDataset);
+            var temp_a = AverageSumOf((p) => { return (Hypothysis(p.X) - p.Y) * p.X; }, TrainDataset);
+            var temp_b = AverageSumOf((p) => { return Hypothysis(p.X) - p.Y; }, TrainDataset);
             a = a - temp_a * LearingRate;
             b = b - temp_b * LearingRate;
         }
-        double Hypophysis(double x) {
+        double Hypothysis(double x) {
             return a * x + b;
         }
         double AverageSumOf(Func<Point, double> func, Point[] parms) {
@@ -55,7 +55,7 @@ namespace SimpleLinearRegression {
             return r / parms.Length;
         }
         double Cost() {
-            return AverageSumOf((p) => { return Math.Pow(Hypophysis(p.X) - p.Y, 2); }, TrainDataset);
+            return AverageSumOf((p) => { return Math.Pow(Hypothysis(p.X) - p.Y, 2); }, TrainDataset);
         }
     }
 }
